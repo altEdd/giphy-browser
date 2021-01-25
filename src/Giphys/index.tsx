@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 type TGiphysProps = {
-	searchQuery?: string;
+	searchQuery: string;
 };
 
 type TGiphyImage = {
@@ -34,15 +34,10 @@ type TQueryPagination = {
 const GiphyConfig = {
 	api_key: "0FN4Q05kFTNZTyNkHLHw4kXG7epp4mvt",
 	trendingUrl: "https://api.giphy.com/v1/gifs/trending",
+	searchUrl: "https://api.giphy.com/v1/gifs/search",
 };
 
-async function getTrendingGifs({
-	limit,
-	offset,
-}: {
-	limit: number;
-	offset: number;
-}) {
+async function getTrendingGifs({ limit, offset }: TQueryPagination) {
 	const queryParameters = new URLSearchParams();
 	queryParameters.append("api_key", GiphyConfig.api_key);
 	queryParameters.append("limit", limit.toString());
@@ -62,7 +57,27 @@ async function getTrendingGifs({
 	}
 }
 
+async function getSearchGifs({ q }: { q: string }) {
+	const queryParameters = new URLSearchParams();
+	queryParameters.append("api_key", GiphyConfig.api_key);
+	queryParameters.append("q", q);
+	const searchUrl = `${GiphyConfig.searchUrl}?${queryParameters}`;
+
+	try {
+		const searchResp = await fetch(searchUrl);
+		const gifSearchResults: TTrendingGifsResponse = await searchResp.json();
+		const { data, pagination } = gifSearchResults;
+		return {
+			data,
+			pagination,
+		};
+	} catch (e) {
+		throw e;
+	}
+}
+
 function Giphys(props: TGiphysProps) {
+	const [searching, setSearching] = useState(false);
 	const [gifs, setGifs] = useState<any[]>([]);
 	const [scrolledToBottom, setScrolledToBottom] = useState(false);
 	const defaultLimit = 24;
@@ -119,7 +134,7 @@ function Giphys(props: TGiphysProps) {
 
 	useEffect(() => {
 		console.log(`Running setFetchNextBatch effect`);
-		if (fetchNextBatch) {
+		if (!searching && fetchNextBatch) {
 			const nextPagination = {
 				limit: pagination.limit + defaultLimit,
 				offset: pagination.offset + defaultLimit,
@@ -140,6 +155,31 @@ function Giphys(props: TGiphysProps) {
 				});
 		}
 	}, [fetchNextBatch]);
+
+	useEffect(() => {
+		const { searchQuery } = props;
+		console.log(`searchQuery: ${searchQuery}`);
+		console.log(`searching: ${searching}`);
+
+		if (!searching && searchQuery !== "") {
+			console.log("SEARCH GIFS " + searchQuery);
+			getSearchGifs({ q: searchQuery })
+				.then(({ data }) => {
+					setGifs(data);
+				})
+				.catch((e) => {
+					console.error(e);
+				})
+				.finally(() => {
+					setSearching(true);
+				});
+		} else if (searching && searchQuery === "") {
+			console.log("SHOW TRENDING, HAS SEARCHED");
+			setSearching(false);
+		} else {
+			console.log("IS FIRST LOAD, HAS NOT SEARCHED");
+		}
+	}, [props.searchQuery, searching]);
 
 	return (
 		<div className="giphs-wrap">

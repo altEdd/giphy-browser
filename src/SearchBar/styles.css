@@ -14,9 +14,14 @@
 }
 .search-bar-btn {
 	flex: 1;
-	background-color: #74faa2;
 	border-radius: 8px;
 	font-size: 18px;
 	margin: 5px;
 	padding: 5px 10px;
+}
+.search-bar-btn-search {
+	background-color: #74faa2;
+}
+.search-bar-btn-clear {
+	background-color: #eb6a62;
 }
