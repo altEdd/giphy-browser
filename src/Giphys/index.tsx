@@ -86,6 +86,7 @@ function Giphys(props: TGiphysProps) {
 		offset: 0,
 	});
 	const [fetchNextBatch, setFetchNextBatch] = useState(false);
+	const [clickedGif, setClickedGif] = useState(null);
 
 	function handleScrollEvent(_e) {
 		if (
@@ -177,13 +178,37 @@ function Giphys(props: TGiphysProps) {
 			<div className="giphs">
 				{gifs.map((g) => {
 					return (
-						<div key={g.id} className="giph">
+						<div
+							key={g.id}
+							className="giph"
+							onClick={(e) => {
+								e.preventDefault();
+								setClickedGif(g);
+							}}
+						>
 							<img src={g.images.fixed_height_downsampled.url} alt={g.slug} />
 							<div className="title">{g.title}</div>
 						</div>
 					);
 				})}
 			</div>
+			{clickedGif !== null && (
+				<>
+					<div
+						className="giph-modal-overlay"
+						onClick={() => setClickedGif(null)}
+					></div>
+					<div className="giph-modal">
+						<div
+							className="giph-modal-close"
+							onClick={() => setClickedGif(null)}
+						>
+							❌{" "}
+						</div>
+						<img src={clickedGif.images.original.url} alt={clickedGif.slug} />
+					</div>
+				</>
+			)}
 		</div>
 	);
 }

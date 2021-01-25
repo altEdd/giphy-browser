@@ -9,6 +9,7 @@
 }
 .giph {
 	margin: 5px;
+	cursor: pointer;
 }
 .giph img {
 	border: 1px solid #57c5f3;
@@ -17,4 +18,36 @@
 .giph .title {
 	font-size: 10px;
 	font-weight: 800;
+}
+
+.giph-modal-overlay {
+	position: absolute;
+	left: 0;
+	background: #ddd;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 0.9;
+	height: 100%;
+	width: 100%;
+	z-index: 900;
+}
+
+.giph-modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1001;
+}
+
+.giph-model img {
+	border-radius: 8px;
+}
+
+.giph-modal-close {
+	cursor: pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
