@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import SearchBar from "./SearchBar";
+import Giphys from "./Giphys";
 
 function App() {
 	const [searchQuery, setSearchQuery] = useState("");
@@ -8,7 +9,7 @@ function App() {
 	return (
 		<div className="app">
 			<SearchBar onSearch={(sq) => setSearchQuery(sq)} />
-			{searchQuery}
+			<Giphys searchQuery={searchQuery} />
 		</div>
 	);
 }
