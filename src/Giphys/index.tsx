@@ -126,20 +126,17 @@ function Giphys(props: TGiphysProps) {
 	}, []);
 
 	useEffect(() => {
-		console.log(`Running scrolledToBottom effect`);
 		if (scrolledToBottom) {
 			setFetchNextBatch(true);
 		}
 	}, [scrolledToBottom]);
 
 	useEffect(() => {
-		console.log(`Running setFetchNextBatch effect`);
 		if (!searching && fetchNextBatch) {
 			const nextPagination = {
 				limit: pagination.limit + defaultLimit,
 				offset: pagination.offset + defaultLimit,
 			};
-			console.log(`nextPagination: ${JSON.stringify(nextPagination)}`);
 			getTrendingGifs(nextPagination)
 				.then(({ data }) => {
 					setFetchNextBatch(false);
@@ -158,11 +155,8 @@ function Giphys(props: TGiphysProps) {
 
 	useEffect(() => {
 		const { searchQuery } = props;
-		console.log(`searchQuery: ${searchQuery}`);
-		console.log(`searching: ${searching}`);
 
 		if (!searching && searchQuery !== "") {
-			console.log("SEARCH GIFS " + searchQuery);
 			getSearchGifs({ q: searchQuery })
 				.then(({ data }) => {
 					setGifs(data);
@@ -174,10 +168,7 @@ function Giphys(props: TGiphysProps) {
 					setSearching(true);
 				});
 		} else if (searching && searchQuery === "") {
-			console.log("SHOW TRENDING, HAS SEARCHED");
 			setSearching(false);
-		} else {
-			console.log("IS FIRST LOAD, HAS NOT SEARCHED");
 		}
 	}, [props.searchQuery, searching]);
 
