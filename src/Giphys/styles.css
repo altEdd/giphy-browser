@@ -1,0 +1,20 @@
+.giphs-wrap {
+	margin: 0 auto;
+	width: 80%;
+}
+
+.giphs {
+	display: flex;
+	flex-flow: row wrap;
+}
+.giph {
+	margin: 5px;
+}
+.giph img {
+	border: 1px solid #57c5f3;
+	border-radius: 8px;
+}
+.giph .title {
+	font-size: 10px;
+	font-weight: 800;
+}
