@@ -22,9 +22,19 @@ function SearchBar(props: TSearchBarProps) {
 					placeholder="Search Giphy..."
 					type="text"
 					value={searchQuery}
-					onChange={(e) => setSearchQuery(e.currentTarget.value)}
+					onChange={(e) => setSearchQuery(e.currentTarget.value.trim())}
 				/>
-				<input className={"search-bar-btn"} type="submit" value=" 🔍 " />
+				<input
+					className={"search-bar-btn search-bar-btn-search"}
+					type="submit"
+					value=" 🔍 "
+				/>
+				<input
+					className={"search-bar-btn search-bar-btn-clear"}
+					type="button"
+					value=" ❌ "
+					onClick={() => setSearchQuery("")}
+				/>
 			</form>
 		</div>
 	);
