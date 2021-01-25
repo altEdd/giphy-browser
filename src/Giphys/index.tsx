@@ -133,6 +133,10 @@ function Giphys(props: TGiphysProps) {
 	}, [scrolledToBottom]);
 
 	useEffect(() => {
+		if (searching) {
+			setFetchNextBatch(false);
+		}
+
 		if (!searching && fetchNextBatch) {
 			const nextPagination = {
 				limit: pagination.limit + defaultLimit,
@@ -157,7 +161,7 @@ function Giphys(props: TGiphysProps) {
 	useEffect(() => {
 		const { searchQuery } = props;
 
-		if (!searching && searchQuery !== "") {
+		if (searchQuery !== "") {
 			getSearchGifs({ q: searchQuery })
 				.then(({ data }) => {
 					setGifs(data);
@@ -168,10 +172,16 @@ function Giphys(props: TGiphysProps) {
 				.finally(() => {
 					setSearching(true);
 				});
-		} else if (searching && searchQuery === "") {
+		} else if (searchQuery === "") {
 			setSearching(false);
+			setGifs([]);
+			setPagination({
+				limit: defaultLimit,
+				offset: 0,
+			});
+			setFetchNextBatch(true);
 		}
-	}, [props.searchQuery, searching]);
+	}, [props]);
 
 	return (
 		<div className="giphs-wrap">
